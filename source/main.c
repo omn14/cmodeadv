@@ -16,6 +16,8 @@
 OBJ_ATTR obj_buffer[128];
 OBJ_AFFINE *obj_aff_buffer= (OBJ_AFFINE*)obj_buffer;
 
+u16 affornot[128];
+
 Point polygon1[] =
 {
 {31,1},
@@ -494,6 +496,7 @@ void obj_test()
 	OBJ_AFFINE *oaff_base= &obj_aff_buffer[1];
 	OBJ_AFFINE *oaff_new= &obj_aff_buffer[2];
 	OBJ_AFFINE *oaff_newf6= &obj_aff_buffer[3];
+	OBJ_AFFINE *oaff_newf8= &obj_aff_buffer[4];
 
 	// oaff_curr = oaff_base * oaff_new
 	// oaff_base changes when the aff-state changes
@@ -515,7 +518,11 @@ void obj_test()
 	int f5x= 352-8, f5y= 135-8;
 	int b3x=450, b3y=480;
 	bool b3press=0;
-	int f7x= 458, f7y= 433;
+	int f7x= 468, f7y= 433;
+	int f8x= 446, f8y= 416;
+	int s1x= 476, s1y= 446;
+	int d1x= 338, d1y=76 ;
+	bool s1press=0;
 	Point b1col[] ={{x2+b1x,y2+b1y},{x2+b1x+8,y2+b1y},{x2+b1x+8,y2+b1y+8},{x2+b1x,y2+b1y+8},{x2+b1x,y2+b1y}};
 	int b1coln = sizeof(b1col)/sizeof(b1col[0]);
 	//Point fence1[] ={{x2+f1x,y2+f1y},{x2+f1x+8,y2+f1y},{x2+f1x+8,y2+f1y+8},{x2+f1x,y2+f1y+8},{x2+f1x,y2+f1y}};
@@ -528,6 +535,8 @@ void obj_test()
 	int fence2n = sizeof(fence2p)/sizeof(fence2p[0]);
 	Point b2col[] ={{x2+b2x,y2+b2y},{x2+b2x+8,y2+b2y},{x2+b2x+8,y2+b2y+8},{x2+b2x,y2+b2y+8},{x2+b2x,y2+b2y}};
 	int b2coln = sizeof(b2col)/sizeof(b2col[0]);
+	Point s1col[] ={{x2+s1x-8,y2+s1y-8},{x2+s1x+8+8,y2+s1y-8},{x2+s1x+8+8,y2+s1y+8+8},{x2+s1x-8,y2+s1y+8+8},{x2+s1x-8,y2+s1y-8}};
+	int s1coln = sizeof(s1col)/sizeof(s1col[0]);
 
 	int dx= 0, dy=0;
 	//int x= 0, y= 0;
@@ -654,6 +663,35 @@ void obj_test()
 		ATTR0_WIDE | ATTR0_4BPP ,				// Square, regular sprite
 		ATTR1_SIZE_32x8 ,					// 16x8p,
 		ATTR2_PALBANK(0) | 6);		// palbank 0, tile 0
+	
+	OBJ_ATTR *fence8= &obj_buffer[12];
+	obj_set_attr(fence8,
+		ATTR0_WIDE | ATTR0_4BPP | ATTR0_AFF,				// Square, regular sprite
+		ATTR1_SIZE_32x8 | ATTR1_AFF_ID(4),					// 16x8p,
+		ATTR2_PALBANK(0) | 6);		// palbank 0, tile 0
+	fence8->attr0 ^= ATTR0_AFF_DBL_BIT;
+	alpha = 8000;
+	obj_aff_identity(&obj_aff_buffer[4]);
+	obj_aff_rotate(oaff_new, alpha);
+	obj_aff_postmul(oaff_newf8, oaff_new);
+	
+	OBJ_ATTR *switch1= &obj_buffer[13];
+	obj_set_attr(switch1,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 11);		// palbank 0, tile 0
+	
+	OBJ_ATTR *door1L= &obj_buffer[14];
+	obj_set_attr(door1L,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 12);		// palbank 0, tile 0
+	
+	OBJ_ATTR *door1R= &obj_buffer[15];
+	obj_set_attr(door1R,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 12);		// palbank 0, tile 0
 
 	while(1)
 	{
@@ -678,18 +716,24 @@ void obj_test()
 			fence4->attr2= ATTR2_BUILD(4, 1, 0);
 			button2->attr2= ATTR2_BUILD(5, 1, 0);
 		}
-
-		if (y>275 && !southHemi){
-			southHemi=1;
-			button1->attr0 ^=ATTR0_HIDE;
-			button2->attr0 ^=ATTR0_HIDE;
+		
+		//gjemme ting fra å pakke rundt
+		for (int i=1; i<15; i++){
+			OBJ_ATTR *objj= &obj_buffer[i];
+			if(y-BFN_GET2(objj->attr0,ATTR0_Y)>40){
+				affornot[i]=BFN_GET(objj->attr0,ATTR0_MODE);
+				obj_hide(objj);
+			
+			}
+			else{
+				obj_unhide(objj,affornot[i]);
+				//obj_unhide(objj,ATTR0_AFF);
+				//obj_unhide(objj,ATTR0_MODE(i));
+				//objj->attr0 ^=ATTR0_HIDE;
+			}
+			//objj->attr0 ^=ATTR0_HIDE;
 		}
-		if (y<275 && southHemi){
-			southHemi=0;
-			button1->attr0 ^=ATTR0_HIDE;
-			button2->attr0 ^=ATTR0_HIDE;
-		}
-
+		
 
 
 		if(pnpoly(warp1n,warp1p,p)){
@@ -703,7 +747,14 @@ void obj_test()
 			y += dy;
 			y2 -= dy;
 		}
-
+		
+		if(pnpoly(s1coln,s1col,p) && !s1press){
+			if(key_hit(KEY_A)){
+				s1press=1;
+				d1x -= 8;
+				switch1->attr2= ATTR2_BUILD(11, 1, 0);
+			}
+		}
 		if(pnpoly(n1,polygon1,p) && !pnpoly(n2,polygon2,p)){
 			if (pnpoly(fence1n,fence1,p) && !b1press){
 
@@ -758,8 +809,12 @@ void obj_test()
 		obj_set_pos(fence6, x2+f5x-10, y2+f5y-25);
 		obj_set_pos(button3, x2+b3x, y2+b3y);
 		obj_set_pos(fence7, x2+f7x, y2+f7y);
-		oam_copy(oam_mem, obj_buffer, 12);	// only need to update one
-		obj_aff_copy(obj_aff_mem, obj_aff_buffer, 4);
+		obj_set_pos(fence8, x2+f8x, y2+f8y);
+		obj_set_pos(switch1, x2+s1x, y2+s1y);
+		obj_set_pos(door1L, x2+d1x, y2+d1y);
+		obj_set_pos(door1R, x2+d1x+8, y2+d1y);
+		oam_copy(oam_mem, obj_buffer, 16);	// only need to update one
+		obj_aff_copy(obj_aff_mem, obj_aff_buffer, 5);
 
 	}
 

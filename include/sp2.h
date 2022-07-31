@@ -3,12 +3,12 @@
 
 //======================================================================
 //
-//	sp2, 16x16@4, 
+//	sp2, 32x32@4, 
 //	+ palette 256 entries, not compressed
-//	+ 4 tiles not compressed
-//	Total size: 512 + 128 = 640
+//	+ 16 tiles not compressed
+//	Total size: 512 + 512 = 1024
 //
-//	Time-stamp: 2022-07-14, 13:56:22
+//	Time-stamp: 2022-07-19, 22:23:22
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -17,8 +17,8 @@
 #ifndef GRIT_SP2_H
 #define GRIT_SP2_H
 
-#define sp2TilesLen 128
-extern const unsigned int sp2Tiles[32];
+#define sp2TilesLen 512
+extern const unsigned int sp2Tiles[128];
 
 #define sp2PalLen 512
 extern const unsigned short sp2Pal[256];
