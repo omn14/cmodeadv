@@ -13,6 +13,7 @@
 #include "sp2.h"
 #include "polygon.h"
 
+u32 hsec= 3600;
 
 OBJ_ATTR obj_buffer[128];
 OBJ_AFFINE *obj_aff_buffer= (OBJ_AFFINE*)obj_buffer;
@@ -968,7 +969,7 @@ void obj_test()
 	spritey[31]=d3y+8;
 
 
-	dx = 92-x;
+	dx = 121-x;
 	x += dx;
 	x2 -= dx;
 
@@ -978,6 +979,15 @@ void obj_test()
 	y += dy;
 	y2 -= dy;
 
+	// Overflow every ~1 second:
+	// 0x4000 ticks @ FREQ_1024
+	REG_TM2D= -0x4000;          // 0x4000 ticks till overflow
+	REG_TM2CNT= TM_FREQ_1024;   // we're using the 1024 cycle timer
+	// cascade into tm3
+	REG_TM3CNT= TM_ENABLE | TM_CASCADE;
+	u32 sec= -1;
+
+	REG_TM2CNT ^= TM_ENABLE;
 	while(1)
 	{
 		vid_vsync();
@@ -1069,6 +1079,23 @@ void obj_test()
 			y += dy;
 			y2 -= dy;
 			obj_set_pos(metr, 120, 80);
+		}
+		if(pnpoly(warp3n,warp3p,p)){
+			REG_TM2CNT ^= TM_ENABLE;
+			REG_TM3CNT ^= TM_ENABLE;
+			tte_printf("#{cx:0x1000}\n Hit 'A' to try again");
+			while(1){
+				key_poll();
+				if(key_hit(KEY_A)){
+					break;
+				}
+			}
+			if (sec<hsec){
+				hsec = sec;
+			}
+			sec=-1;
+			obj_test();
+
 		}
 
 		if(pnpoly(s1coln,s1col,p) && !s1press){
@@ -1254,8 +1281,10 @@ void obj_test()
 		pb= key_is_down(KEY_SELECT) ? 1 : 0;
 
 		// toggle mapping mode
-		if(key_hit(KEY_START))
-			REG_DISPCNT ^= DCNT_OBJ_1D;
+		if(key_hit(KEY_START)){
+			//REG_TM2CNT ^= TM_ENABLE;
+			//REG_DISPCNT ^= DCNT_OBJ_1D;
+			}
 
 		// Hey look, it's one of them build macros!
 		metr->attr2= ATTR2_BUILD(tid, pb, 0);
@@ -1263,6 +1292,7 @@ void obj_test()
 
 		oam_copy(oam_mem, obj_buffer, 32);	// only need to update one
 		obj_aff_copy(obj_aff_mem, obj_aff_buffer, 6);
+		/*
 		tte_printf("#{el}");
 		tte_printf("#{X:0}");
 		tte_printf("#{cx:0x1000}warp1:,%d",abs(y-(BFN_GET(warp1->attr0,ATTR0_Y)-y2)));
@@ -1270,6 +1300,14 @@ void obj_test()
 		//tte_printf("#{X:72}");
 		tte_printf("#{cx:0x1000} x: ,%d",x);      // Print "Hello world!"
 		tte_printf("#{cx:0x1000} y: ,%d",y);      // Print "Hello world!"
+		*/
+		if(REG_TM3D != sec)
+		        {
+		            sec= REG_TM3D;
+		            tte_printf("#{es;P:24,5}Time %02d:%02d  Best %02d:%02d",
+		                 (sec%3600)/60, sec%60,
+									 (hsec%3600)/60, hsec%60);
+		        }
 
 	}
 
@@ -1304,7 +1342,11 @@ int main()
 	//REG_BLDCNT= BLD_BUILD(
 	//	BLD_OBJ | BLD_BG0, // Top layers
 	//	BLD_BG1,		// Bottom layers
-//mode);// Mode
+	//mode);// Mode
+
+
+
+
 
 	// Places the glyphs of a 4bpp boxed metroid sprite
 	//   into LOW obj memory (cbb == 4)
