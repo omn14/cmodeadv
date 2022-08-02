@@ -9,11 +9,13 @@
 #include <tonc.h>
 
 #include "f1out.h"
+#include "f2out.h"
 #include "sp.h"
 #include "sp2.h"
 #include "polygon.h"
 
 u32 hsec= 3600;
+u32 sec= -1;
 
 OBJ_ATTR obj_buffer[128];
 OBJ_AFFINE *obj_aff_buffer= (OBJ_AFFINE*)obj_buffer;
@@ -528,7 +530,7 @@ void obj_test()
 	int f8x= 446, f8y= 416;
 	int s1x= 476, s1y= 446;
 	int d1x= 338, d1y=76 ;
-	bool s1press=0;
+	bool s1press=1;
 	Point door1p[] ={{332,72},{332+40,72},{332+40,82},{332,82},{332,72}};
 	int door1n = sizeof(door1p)/sizeof(door1p[0]);
 	Point b1col[] ={{x2+b1x,y2+b1y},{x2+b1x+8,y2+b1y},{x2+b1x+8,y2+b1y+8},{x2+b1x,y2+b1y+8},{x2+b1x,y2+b1y}};
@@ -559,7 +561,7 @@ void obj_test()
 	int f10x=476-32 , f10y= 46-16;
 	int d2x= 351, d2y=288;
 	int s2x= 416, s2y= 52;
-	bool s2press=0;
+	bool s2press=1;
 	Point s2col[] ={{x2+s2x-8,y2+s2y-8},{x2+s2x+8+8,y2+s2y-8},{x2+s2x+8+8,y2+s2y+8+8},{x2+s2x-8,y2+s2y+8+8},{x2+s2x-8,y2+s2y-8}};
 	int s2coln = sizeof(s2col)/sizeof(s2col[0]);
 	Point door2p[] ={{d2x,d2y},{d2x+40,d2y},{d2x+40,d2y+10},{d2x,d2y+10},{d2x,d2y}};
@@ -577,7 +579,7 @@ void obj_test()
 	Point fence6p[] ={{58,446},{58+30,446},{58+30,446+25},{58,446+25},{58,446}};
 	int fence6n = sizeof(fence6p)/sizeof(fence6p[0]);
 	int s3x= 206, s3y= 432;
-	bool s3press=0;
+	bool s3press=1;
 	Point s3col[] ={{x2+s3x-8,y2+s3y-8},{x2+s3x+8+8,y2+s3y-8},{x2+s3x+8+8,y2+s3y+8+8},{x2+s3x-8,y2+s3y+8+8},{x2+s3x-8,y2+s3y-8}};
 	int s3coln = sizeof(s3col)/sizeof(s3col[0]);
 	int b5x=12, b5y=186;
@@ -985,7 +987,7 @@ void obj_test()
 	REG_TM2CNT= TM_FREQ_1024;   // we're using the 1024 cycle timer
 	// cascade into tm3
 	REG_TM3CNT= TM_ENABLE | TM_CASCADE;
-	u32 sec= -1;
+	sec= -1;
 
 	REG_TM2CNT ^= TM_ENABLE;
 	while(1)
@@ -1082,7 +1084,8 @@ void obj_test()
 		}
 		if(pnpoly(warp3n,warp3p,p)){
 			REG_TM2CNT ^= TM_ENABLE;
-			REG_TM3CNT ^= TM_ENABLE;
+			//REG_TM3CNT ^= TM_ENABLE;
+
 			tte_printf("#{cx:0x1000}\n Hit 'A' to try again");
 			while(1){
 				key_poll();
@@ -1090,12 +1093,19 @@ void obj_test()
 					break;
 				}
 			}
+			memcpy(&tile_mem[0][0], f2outTiles, f2outTilesLen);
+			// Load map into SBB 28
+			memcpy(&se_mem[20][0], f2outMap, f2outMapLen);
+			//REG_BG1CNT= BG_CBB(2) | BG_SBB(20) | BG_4BPP | BG_REG_64x64;
+			oam_init(obj_buffer, 128);
+			/*
 			if (sec<hsec){
 				hsec = sec;
 			}
 			sec=-1;
 			obj_test();
-
+			*/
+			level2();
 		}
 
 		if(pnpoly(s1coln,s1col,p) && !s1press){
@@ -1311,24 +1321,618 @@ void obj_test()
 
 	}
 
+
+
 }
+
+int level2(){
+
+OBJ_AFFINE *oaff_base= &obj_aff_buffer[1];
+OBJ_AFFINE *oaff_new= &obj_aff_buffer[2];
+
+Point polygon1[] =	{
+{32,0},
+{81,14},
+{116,11},
+{124,16},
+{126,22},
+{136,22},
+{189,70},
+{195,63},
+{184,40},
+{198,9},
+{235,11},
+{258,27},
+{256,72},
+{236,133},
+{238,161},
+{252,169},
+{309,106},
+{307,91},
+{360,87},
+{388,101},
+{400,115},
+{397,145},
+{350,159},
+{300,147},
+{276,169},
+{273,235},
+{296,232},
+{309,201},
+{345,218},
+{332,248},
+{274,251},
+{266,294},
+{276,361},
+{271,397},
+{247,440},
+{255,449},
+{295,436},
+{338,394},
+{365,338},
+{386,348},
+{371,384},
+{375,412},
+{387,432},
+{469,431},
+{470,456},
+{449,457},
+{450,465},
+{470,470},
+{477,498},
+{449,511},
+{427,496},
+{430,457},
+{416,455},
+{410,493},
+{354,512},
+{319,494},
+{322,468},
+{308,454},
+{188,508},
+{131,481},
+{83,477},
+{65,460},
+{18,441},
+{0,397},
+{11,375},
+{55,357},
+{50,349},
+{8,348},
+{7,328},
+{24,329},
+{24,322},
+{18,310},
+{18,294},
+{35,286},
+{55,307},
+{42,318},
+{42,328},
+{64,330},
+{76,346},
+{85,340},
+{81,302},
+{46,256},
+{10,238},
+{10,197},
+{27,165},
+{52,175},
+{50,221},
+{63,251},
+{75,247},
+{81,234},
+{83,213},
+{74,184},
+{76,135},
+{47,134},
+{40,71},
+{74,58},
+{84,64},
+{86,93},
+{93,94},
+{94,62},
+{77,45},
+{32,59},
+{8,46},
+{7,20},
+{32,0}};
+int n1 = sizeof(polygon1)/sizeof(polygon1[0]);
+
+Point polygon2[] =
+{
+{95,134},
+{110,130},
+{120,41},
+{128,39},
+{156,71},
+{180,91},
+{152,148},
+{149,156},
+{133,162},
+{113,158},
+{103,160},
+{94,149},
+{94,134}};
+int n2 = sizeof(polygon2)/sizeof(polygon2[0]);
+
+Point polygon3[] =
+{
+{159,170},
+{183,170},
+{191,182},
+{215,175},
+{240,181},
+{255,203},
+{255,235},
+{231,270},
+{227,314},
+{220,350},
+{210,359},
+{199,351},
+{208,263},
+{205,238},
+{196,227},
+{169,226},
+{158,238},
+{154,265},
+{170,326},
+{154,334},
+{133,332},
+{122,355},
+{119,388},
+{128,421},
+{148,421},
+{186,381},
+{198,379},
+{196,399},
+{157,446},
+{131,461},
+{90,460},
+{87,451},
+{112,428},
+{96,387},
+{106,345},
+{100,320},
+{100,292},
+{121,291},
+{134,280},
+{135,251},
+{115,252},
+{114,271},
+{91,273},
+{87,264},
+{133,226},
+{149,221},
+{154,212},
+{144,195},
+{152,181},
+{159,170}};
+int n3 = sizeof(polygon3)/sizeof(polygon3[0]);
+
+Point polygon4[] =
+{
+{370,330},
+{400,341},
+{459,354},
+{498,339},
+{512,306},
+{488,266},
+{480,223},
+{509,159},
+{494,119},
+{471,121},
+{455,112},
+{439,93},
+{430,65},
+{441,34},
+{342,19},
+{332,30},
+{325,30},
+{305,44},
+{305,83},
+{359,77},
+{390,92},
+{409,113},
+{407,147},
+{465,145},
+{478,163},
+{464,213},
+{456,222},
+{383,252},
+{370,265},
+{367,324},
+{370,329}};
+int n4 = sizeof(polygon4)/sizeof(polygon4[0]);
+
+Point polygon5[] =
+{
+{382,238},
+{407,229},
+{416,196},
+{384,177},
+{363,198},
+{377,234},
+{383,238}};
+int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
+
+
+
+	// Overflow every ~1 second:
+	// 0x4000 ticks @ FREQ_1024
+	REG_TM2D= -0x4000;          // 0x4000 ticks till overflow
+	REG_TM2CNT= TM_FREQ_1024;   // we're using the 1024 cycle timer
+	// cascade into tm3
+	REG_TM3CNT= TM_ENABLE | TM_CASCADE;
+	//sec= -1;
+
+	REG_TM2CNT ^= TM_ENABLE;
+
+	int x= 10, y= 10;
+	int ox=120-x, oy=80-y;
+	//int x= 92, y= 410;
+	int x2= 0, y2= 0;
+	int x2o=0, y2o=0;
+	int dx= 0, dy=0;
+	//int x= 0, y= 0;
+	u32 tid= 0, pb= 0;		// tile id, pal-bank
+
+	OBJ_ATTR *metr= &obj_buffer[0];
+	obj_set_attr(metr,
+		ATTR0_SQUARE,				// Square, regular sprite
+		ATTR1_SIZE_16,					// 16x16p,
+		ATTR2_PALBANK(pb) | tid);		// palbank 0, tile 0
+
+	// position sprite (redundant here; the _real_ position
+	// is set further down
+	obj_set_pos(metr, x, y);
+
+
+	//sprites2
+	int f2_1x=342+ox-18 , f2_1y= 388+oy;
+	Point fence2_1p[] ={{320,400},{320+60,400},{320+60,400-10},{320,400-10},{320,400}};
+	int fence2_1n = sizeof(fence2_1p)/sizeof(fence2_1p[0]);
+	int s2_1x= 350+ox, s2_1y= 370+oy;
+	bool s2_1press=0;
+	Point s2_1col[] ={{x2+s2_1x-ox-8,y2+s2_1y-oy-8},{x2+s2_1x-ox+8+8,y2+s2_1y-oy-8},
+	{x2+s2_1x-ox+8+8,y2+s2_1y-oy+8+8},{x2+s2_1x-ox-8,y2+s2_1y-oy+8+8},{x2+s2_1x-ox-8,y2+s2_1y-oy-8}};
+	int s2_1coln = sizeof(s2_1col)/sizeof(s2_1col[0]);
+	int w1x=456, w1y=484;
+	Point warp1p[] ={{x2+w1x,y2+w1y},{x2+w1x+8,y2+w1y},{x2+w1x+8,y2+w1y+8},{x2+w1x,y2+w1y+8},{x2+w1x,y2+w1y}};
+	int warp1n = sizeof(warp1p)/sizeof(warp1p[0]);
+	int w2x=375, w2y=195;
+	Point warp2p[] ={{x2+w2x,y2+w2y},{x2+w2x+8,y2+w2y},{x2+w2x+8,y2+w2y+8},{x2+w2x,y2+w2y+8},{x2+w2x,y2+w2y}};
+	int warp2n = sizeof(warp2p)/sizeof(warp2p[0]);
+	int w3x=365, w3y=348;
+	Point warp3p[] ={{x2+w3x,y2+w3y},{x2+w3x+8,y2+w3y},{x2+w3x+8,y2+w3y+8},{x2+w3x,y2+w3y+8},{x2+w3x,y2+w3y}};
+	int warp3n = sizeof(warp3p)/sizeof(warp3p[0]);
+	int w4x=392, w4y=222;
+	Point warp4p[] ={{x2+w4x,y2+w4y},{x2+w4x+8,y2+w4y},{x2+w4x+8,y2+w4y+8},{x2+w4x,y2+w4y+8},{x2+w4x,y2+w4y}};
+	int warp4n = sizeof(warp4p)/sizeof(warp4p[0]);
+	int b1x=347, b1y=483;
+	bool b1press=0;
+	Point b1col[] ={{x2+b1x,y2+b1y},{x2+b1x+8,y2+b1y},{x2+b1x+8,y2+b1y+8},{x2+b1x,y2+b1y+8},{x2+b1x,y2+b1y}};
+	int b1coln = sizeof(b1col)/sizeof(b1col[0]);
+	int f2_2x=421-32 , f2_2y= 437-32-8;
+	Point fence2_2p[] ={{420,426},{420+3,426},{420+3,426+50},{420,426+50},{420,426}};
+	int fence2_2n = sizeof(fence2_2p)/sizeof(fence2_2p[0]);
+
+	u32 t1 = 0;
+
+	OBJ_ATTR *fence2_1= &obj_buffer[1];
+	obj_set_attr(fence2_1,
+		ATTR0_WIDE | ATTR0_4BPP | ATTR0_AFF_DBL,				// Square, regular sprite
+		ATTR1_SIZE_32x8 | ATTR1_AFF_ID(0),					// 16x8p,
+		ATTR2_PALBANK(0) | 6);		// palbank 0, tile 0
+	//fence8->attr0 ^= ATTR0_AFF_DBL_BIT;
+	affornot[1]=ATTR0_AFF_DBL;
+	spritex[1]=f2_1x;
+	spritey[1]=f2_1y;
+	//alpha = 16000;
+	//obj_aff_identity(&obj_aff_buffer[5]);
+	//obj_aff_rotate(oaff_new, alpha);
+	//obj_aff_postmul(oaff_newf10, oaff_new);
+
+	OBJ_ATTR *switch2_1= &obj_buffer[2];
+	obj_set_attr(switch2_1,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 11);		// palbank 0, tile 0
+	affornot[2]=ATTR0_REG;
+	spritex[2]=s2_1x;
+	spritey[2]=s2_1y;
+
+	OBJ_ATTR *warp1= &obj_buffer[3];
+	obj_set_attr(warp1,
+		ATTR0_SQUARE | ATTR0_4BPP,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 10);		// palbank 0, tile 0
+
+	obj_set_pos(warp1, x2+w1x+ox, y2+w1y+oy);
+	affornot[3]=ATTR0_REG;
+	spritex[3]=w1x;
+	spritey[3]=w1y;
+
+	OBJ_ATTR *warp2= &obj_buffer[4];
+	obj_set_attr(warp2,
+		ATTR0_SQUARE | ATTR0_4BPP,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 10);		// palbank 0, tile 0
+
+	obj_set_pos(warp2, x2+w2x+ox, y2+w2y+oy);
+	affornot[4]=ATTR0_REG;
+	spritex[4]=w2x;
+	spritey[4]=w2y;
+
+	OBJ_ATTR *warp3= &obj_buffer[5];
+	obj_set_attr(warp3,
+		ATTR0_SQUARE | ATTR0_4BPP,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 10);		// palbank 0, tile 0
+
+	obj_set_pos(warp3, x2+w3x+ox, y2+w3y+oy);
+	affornot[5]=ATTR0_REG;
+	spritex[5]=w3x;
+	spritey[5]=w3y;
+
+	OBJ_ATTR *warp4= &obj_buffer[6];
+	obj_set_attr(warp4,
+		ATTR0_SQUARE | ATTR0_4BPP,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 10);		// palbank 0, tile 0
+
+	obj_set_pos(warp4, x2+w4x+ox, y2+w4y+oy);
+	affornot[6]=ATTR0_REG;
+	spritex[6]=w4x;
+	spritey[6]=w4y;
+
+	OBJ_ATTR *button1= &obj_buffer[7];
+	obj_set_attr(button1,
+		ATTR0_SQUARE,				// Square, regular sprite
+		ATTR1_SIZE_8,					// 16x8p,
+		ATTR2_PALBANK(0) | 5);		// palbank 0, tile 0
+
+	obj_set_pos(button1, x2+b1x+ox, y2+b1y+oy);
+	affornot[7]=ATTR0_REG;
+	spritex[7]=b1x;
+	spritey[7]=b1y;
+
+	OBJ_ATTR *fence2_2= &obj_buffer[8];
+	obj_set_attr(fence2_2,
+		ATTR0_WIDE | ATTR0_4BPP | ATTR0_AFF_DBL,				// Square, regular sprite
+		ATTR1_SIZE_32x8 | ATTR1_AFF_ID(1),					// 16x8p,
+		ATTR2_PALBANK(0) | 6);		// palbank 0, tile 0
+	//fence8->attr0 ^= ATTR0_AFF_DBL_BIT;
+	affornot[8]=ATTR0_AFF_DBL;
+	spritex[8]=f2_2x;
+	spritey[8]=f2_2y;
+	s16 alpha = 16000;
+	obj_aff_identity(&obj_aff_buffer[1]);
+	obj_aff_rotate(oaff_new, alpha);
+	obj_aff_postmul(oaff_base, oaff_new);
+
+	while(1){
+		vid_vsync();
+		key_poll();
+
+
+
+		if(REG_TM3D != sec)
+		        {
+		            sec= REG_TM3D;
+		            tte_printf("#{es;P:0,5}Time %02d:%02d  Best %02d:%02d",
+		                 (sec%3600)/60, sec%60,
+									 (hsec%3600)/60, hsec%60);
+									 tte_printf("#{cx:0x1000}\n x: ,%d",x);      // Print "Hello world!"
+							 		tte_printf("#{cx:0x1000}\n y: ,%d",y);      // Print "Hello world!"
+		        }
+		// move left/right
+		Point p={x+2*key_tri_horz()+8,y+2*key_tri_vert()+8};
+
+		if(pnpoly(s2_1coln,s2_1col,p) && !s2_1press){
+			if(key_hit(KEY_A)){
+				s2_1press=1;
+				fence2_1->attr2= ATTR2_BUILD(6, 1, 0);
+				switch2_1->attr2= ATTR2_BUILD(11, 1, 0);
+			}
+		}
+		if(pnpoly(b1coln,b1col,p) && !b1press){
+			t1 =sec + 1;
+			b1press=1;
+			fence2_2->attr2= ATTR2_BUILD(6, 1, 0);
+			button1->attr2= ATTR2_BUILD(5, 1, 0);
+		}
+		if(b1press){
+			if(sec>t1){
+				b1press=0;
+				fence2_2->attr2= ATTR2_BUILD(6, 0, 0);
+				button1->attr2= ATTR2_BUILD(5, 0, 0);
+			}
+		}
+
+		if(pnpoly(warp1n,warp1p,p)){
+			dx = 390-x;
+			x += dx;
+			x2 -= dx;
+			// move up/down
+			dy = 197-y;
+			y += dy;
+			y2 -= dy;
+			obj_set_pos(metr, 120, 80);
+		}
+		if(pnpoly(warp2n,warp2p,p)){
+			dx = 365-x;
+			x += dx;
+			x2 -= dx;
+			// move up/down
+			dy = 370-y;
+			y += dy;
+			y2 -= dy;
+			obj_set_pos(metr, 120, 80);
+		}
+		if(pnpoly(warp3n,warp3p,p)){
+			dx = 390-x;
+			x += dx;
+			x2 -= dx;
+			// move up/down
+			dy = 312-y;
+			y += dy;
+			y2 -= dy;
+			obj_set_pos(metr, 120, 80);
+		}
+		if(pnpoly(warp4n,warp4p,p)){
+			dx = 315-x;
+			x += dx;
+			x2 -= dx;
+			// move up/down
+			dy = 231-y;
+			y += dy;
+			y2 -= dy;
+			obj_set_pos(metr, 120, 80);
+		}
+		if((pnpoly(n1,polygon1,p) && !pnpoly(n2,polygon2,p) && !pnpoly(n3,polygon3,p)) || (pnpoly(n4,polygon4,p) || pnpoly(n5,polygon5,p)) ){
+			if (pnpoly(fence2_1n,fence2_1p,p) && !s2_1press){
+
+			}
+			else if (pnpoly(fence2_2n,fence2_2p,p) && !b1press){
+
+			}
+
+			else{
+				dx = 2*key_tri_horz();
+				x += dx;
+				x2 -= dx;
+
+
+				// move up/down
+				dy = 2*key_tri_vert();
+				y += dy;
+				y2 -= dy;
+				x2o=x2;
+				y2o=y2;
+				if(y<80 && x<120){
+					//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+					obj_set_pos(metr, x, y);
+					REG_BG1HOFS= 0;
+					REG_BG1VOFS= 0;
+
+					x2=0;
+					y2=0;
+
+
+				}
+				else if(y>512-80 && x<120){
+					//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+					obj_set_pos(metr, x, 160-(512-y));
+
+
+					x2=0;
+					y2=y2-(512-80-y);
+
+
+				}
+				else if(y>512-80 && x>512-120){
+					//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+					obj_set_pos(metr, 240-(512-x), 160-(512-y));
+
+
+					x2=x2-(512-120-x);
+					y2=y2-(512-80-y);
+
+
+				}
+				else if(x>512-120 && y<80){
+					//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+					obj_set_pos(metr, 240-(512-x), y);
+					x2=x2-(512-120-x);
+					y2=0;
+
+				}
+				else if(y<80){
+					//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+					obj_set_pos(metr, 120, y);
+					y2=0;
+					REG_BG1HOFS= x-120;
+				}
+				else if(y>512-80){
+					obj_set_pos(metr, 120, 160-(512-y));
+					REG_BG1HOFS= x-120;
+					y2=y2-(512-80-y);
+
+				}
+
+				else if(x<120){
+					//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+					obj_set_pos(metr, x, 80);
+					REG_BG1VOFS= y-80;
+					x2=0;
+
+				}
+				else if(x>512-120){
+					//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+					obj_set_pos(metr, 240-(512-x), 80);
+					REG_BG1VOFS= y-80;
+					x2=x2-(512-120-x);
+
+				}
+				else{
+					REG_BG1HOFS= x-120;
+					REG_BG1VOFS= y-80;
+				}
+				obj_set_pos(fence2_1, x2+f2_1x, y2+f2_1y);
+				obj_set_pos(switch2_1, x2+s2_1x, y2+s2_1y);
+				obj_set_pos(warp1, x2+w1x+ox, y2+w1y+oy);
+				obj_set_pos(warp2, x2+w2x+ox, y2+w2y+oy);
+				obj_set_pos(warp3, x2+w3x+ox, y2+w3y+oy);
+				obj_set_pos(warp4, x2+w4x+ox, y2+w4y+oy);
+				obj_set_pos(button1, x2+b1x+ox, y2+b1y+oy);
+				obj_set_pos(fence2_2, x2+f2_2x+ox, y2+f2_2y+ox);
+
+				x2=x2o;
+				y2=y2o;
+
+			}
+		}
+		oam_copy(oam_mem, obj_buffer, 9);	// only need to update one
+		obj_aff_copy(obj_aff_mem, obj_aff_buffer, 1);
+		//gjemme ting fra å pakke rundt
+		for (int i=1; i<9; i++){
+			OBJ_ATTR *objj= &obj_buffer[i];
+			//if(abs(y-(BFN_GET(objj->attr0,ATTR0_Y)-y2))>100){
+			if(abs(y-spritey[i])>130){
+				//affornot[i]=BFN_GET(objj->attr0,ATTR0_MODE);
+				obj_hide(objj);
+
+			}
+			else{
+				obj_unhide(objj,affornot[i]);
+			}
+		}
+
+	}
+}
+
 int main()
 {
 	// Load palette
-	memcpy(pal_bg_mem, f1outPal, f1outPalLen);
+	memcpy(pal_bg_mem, f1outPal, f2outPalLen);
 	// Load tiles into CBB 0
 	memcpy(&tile_mem[0][0], f1outTiles, f1outTilesLen);
 	// Load map into SBB 28
-	memcpy(&se_mem[28][0], f1outMap, f1outMapLen);
+	memcpy(&se_mem[20][0], f1outMap, f1outMapLen);
+
+	//memcpy(&tile_mem[2][0], f2outTiles, f2outTilesLen);
+	// Load map into SBB 28
+	//memcpy(&se_mem[20][0], f2outMap, f2outMapLen);
 
 	// set up BG0 for a 4bpp 64x32t map, using
 	//   using charblock 0 and screenblock 31
 	//REG_BG0CNT= BG_CBB(0) | BG_SBB(28) | BG_4BPP | BG_REG_64x64;
-	REG_BG1CNT= BG_CBB(0) | BG_SBB(28) | BG_4BPP | BG_REG_64x64;
+	REG_BG1CNT= BG_CBB(0) | BG_SBB(20) | BG_4BPP | BG_REG_64x64;
+	//REG_BG1CNT= BG_CBB(2) | BG_SBB(20) | BG_4BPP | BG_REG_64x64;
 	REG_DISPCNT= DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
 
 	// Init BG 0 for text on screen entries.
-	tte_init_se_default(0, BG_CBB(2)|BG_SBB(20));
+	tte_init_se_default(0, BG_CBB(3)|BG_SBB(10));
 	// Enable TTE's console functionality
   tte_init_con();
 
