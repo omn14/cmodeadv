@@ -10,8 +10,11 @@
 
 #include "f1out.h"
 #include "f2out.h"
+#include "f3out.h"
 #include "sp.h"
 #include "sp2.h"
+#include "bossW.h"
+#include "dragon.h"
 #include "polygon.h"
 
 u32 hsec= 3600;
@@ -530,7 +533,7 @@ void obj_test()
 	int f8x= 446, f8y= 416;
 	int s1x= 476, s1y= 446;
 	int d1x= 338, d1y=76 ;
-	bool s1press=1;
+	bool s1press=0;
 	Point door1p[] ={{332,72},{332+40,72},{332+40,82},{332,82},{332,72}};
 	int door1n = sizeof(door1p)/sizeof(door1p[0]);
 	Point b1col[] ={{x2+b1x,y2+b1y},{x2+b1x+8,y2+b1y},{x2+b1x+8,y2+b1y+8},{x2+b1x,y2+b1y+8},{x2+b1x,y2+b1y}};
@@ -561,7 +564,7 @@ void obj_test()
 	int f10x=476-32 , f10y= 46-16;
 	int d2x= 351, d2y=288;
 	int s2x= 416, s2y= 52;
-	bool s2press=1;
+	bool s2press=0;
 	Point s2col[] ={{x2+s2x-8,y2+s2y-8},{x2+s2x+8+8,y2+s2y-8},{x2+s2x+8+8,y2+s2y+8+8},{x2+s2x-8,y2+s2y+8+8},{x2+s2x-8,y2+s2y-8}};
 	int s2coln = sizeof(s2col)/sizeof(s2col[0]);
 	Point door2p[] ={{d2x,d2y},{d2x+40,d2y},{d2x+40,d2y+10},{d2x,d2y+10},{d2x,d2y}};
@@ -579,7 +582,7 @@ void obj_test()
 	Point fence6p[] ={{58,446},{58+30,446},{58+30,446+25},{58,446+25},{58,446}};
 	int fence6n = sizeof(fence6p)/sizeof(fence6p[0]);
 	int s3x= 206, s3y= 432;
-	bool s3press=1;
+	bool s3press=0;
 	Point s3col[] ={{x2+s3x-8,y2+s3y-8},{x2+s3x+8+8,y2+s3y-8},{x2+s3x+8+8,y2+s3y+8+8},{x2+s3x-8,y2+s3y+8+8},{x2+s3x-8,y2+s3y-8}};
 	int s3coln = sizeof(s3col)/sizeof(s3col[0]);
 	int b5x=12, b5y=186;
@@ -1086,7 +1089,7 @@ void obj_test()
 			REG_TM2CNT ^= TM_ENABLE;
 			//REG_TM3CNT ^= TM_ENABLE;
 
-			tte_printf("#{cx:0x1000}\n Hit 'A' to try again");
+			tte_printf("#{cx:0x1000}\n Hit 'A' to next level");
 			while(1){
 				key_poll();
 				if(key_hit(KEY_A)){
@@ -1664,6 +1667,9 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 	bool s5press=0;
 	Point s5col[]={{x2+s5x-8,y2+s5y-8},{x2+s5x+8+8,y2+s5y-8},{x2+s5x+8+8,y2+s5y+8+8},{x2+s5x-8,y2+s5y+8+8},{x2+s5x-8,y2+s5y-8}};
 	int s5coln = sizeof(s5col)/sizeof(s5col[0]);
+	int bwx= 320, bwy= 40;
+	Point bwcol[]={{x2+bwx,y2+bwy},{x2+bwx+32,y2+bwy},{x2+bwx+32,y2+bwy+32},{x2+bwx,y2+bwy+32},{x2+bwx,y2+bwy}};
+	int bwcoln = sizeof(bwcol)/sizeof(bwcol[0]);
 
 	u32 t1 = 0;
 
@@ -1922,6 +1928,16 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 	spritex[25]=f2_6x;
 	spritey[25]=f2_6y;
 
+	OBJ_ATTR *bossW= &obj_buffer[26];
+	obj_set_attr(bossW,
+		ATTR0_SQUARE | ATTR0_4BPP | ATTR0_REG,				// Square, regular sprite
+		ATTR1_SIZE_32,					// 16x8p,
+		ATTR2_PALBANK(0) | 13);		// palbank 0, tile 0
+	//fence8->attr0 ^= ATTR0_AFF_DBL_BIT;
+	affornot[26]=ATTR0_REG;
+	spritex[26]=bwx;
+	spritey[26]=bwy;
+
 	while(1){
 		vid_vsync();
 		key_poll();
@@ -1934,8 +1950,8 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 		            tte_printf("#{es;P:0,5}Time %02d:%02d  Best %02d:%02d",
 		                 (sec%3600)/60, sec%60,
 									 (hsec%3600)/60, hsec%60);
-									 tte_printf("#{cx:0x1000}\n x: ,%d",x);      // Print "Hello world!"
-							 		tte_printf("#{cx:0x1000}\n y: ,%d",y);      // Print "Hello world!"
+									 //tte_printf("#{cx:0x1000}\n x: ,%d",x);      // Print "Hello world!"
+							 		//tte_printf("#{cx:0x1000}\n y: ,%d",y);      // Print "Hello world!"
 		        }
 		// move left/right
 		Point p={x+2*key_tri_horz()+8,y+2*key_tri_vert()+8};
@@ -2002,6 +2018,33 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 				fence2_2->attr2= ATTR2_BUILD(6, 0, 0);
 				button1->attr2= ATTR2_BUILD(5, 0, 0);
 			}
+		}
+
+		if(pnpoly(bwcoln,bwcol,p)){
+			REG_TM2CNT ^= TM_ENABLE;
+			//REG_TM3CNT ^= TM_ENABLE;
+
+			tte_printf("#{cx:0x1000}\n Hit 'A' to next level");
+			while(1){
+				key_poll();
+				if(key_hit(KEY_A)){
+					break;
+				}
+			}
+			memcpy(&tile_mem[0][0], f3outTiles, f2outTilesLen);
+			// Load map into SBB 28
+			memcpy(&se_mem[20][0], f3outMap, f2outMapLen);
+			//REG_BG1CNT= BG_CBB(2) | BG_SBB(20) | BG_4BPP | BG_REG_64x64;
+			memcpy(pal_obj_mem, dragonPal, dragonPalLen);
+			oam_init(obj_buffer, 128);
+			/*
+			if (sec<hsec){
+				hsec = sec;
+			}
+			sec=-1;
+			obj_test();
+			*/
+			level3();
 		}
 
 		if(pnpoly(warp1n,warp1p,p)){
@@ -2123,6 +2166,7 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 					obj_set_pos(metr, 240-(512-x), y);
 					x2=x2-(512-120-x);
 					y2=0;
+					oy=0;
 
 				}
 				else if(y<80){
@@ -2183,6 +2227,7 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 				obj_set_pos(fence2_5, x2+f2_5x+ox, y2+f2_5y+oy);
 				obj_set_pos(fence2_6, x2+f2_6x+ox, y2+f2_6y+oy);
 				obj_set_pos(switch5, x2+s5x+ox, y2+s5y+oy);
+				obj_set_pos(bossW, x2+bwx+ox, y2+bwy+oy);
 
 				x2=x2o;
 				y2=y2o;
@@ -2191,10 +2236,10 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 
 			}
 		}
-		oam_copy(oam_mem, obj_buffer, 26);	// only need to update one
+		oam_copy(oam_mem, obj_buffer, 27);	// only need to update one
 		obj_aff_copy(obj_aff_mem, obj_aff_buffer, 1);
 		//gjemme ting fra å pakke rundt
-		for (int i=1; i<26; i++){
+		for (int i=1; i<27; i++){
 			OBJ_ATTR *objj= &obj_buffer[i];
 			//if(abs(y-(BFN_GET(objj->attr0,ATTR0_Y)-y2))>100){
 			if(abs(y-spritey[i])>130 ){
@@ -2208,6 +2253,228 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 		}
 
 	}
+}
+
+int level3(){
+
+Point polygon5[] =
+	{
+	{0,242},
+	{75,71},
+	{258,0},
+	{435,71},
+	{512,241},
+	{414,469},
+	{308,512},
+	{76,410},
+	{0,244}};
+int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
+
+
+
+	// Overflow every ~1 second:
+	// 0x4000 ticks @ FREQ_1024
+	REG_TM2D= -0x4000;          // 0x4000 ticks till overflow
+	REG_TM2CNT= TM_FREQ_1024;   // we're using the 1024 cycle timer
+	// cascade into tm3
+	REG_TM3CNT= TM_ENABLE | TM_CASCADE;
+	//sec= -1;
+
+	REG_TM2CNT ^= TM_ENABLE;
+
+	int x= 120, y= 80;
+	int ox=120-x, oy=80-y;
+	//int x= 92, y= 410;
+	int x2= 0, y2= 0;
+	int x2o=0, y2o=0;
+	int dx= 0, dy=0;
+	//int x= 0, y= 0;
+	u32 tid= 0, pb= 0;		// tile id, pal-bank
+
+	int dgx=130, dgy=90;
+	Point dgcol[]={{x2+dgx,y2+dgy},{x2+dgx+64,y2+dgy},{x2+dgx+64,y2+dgy+64},{x2+dgx,y2+dgy+64},{x2+dgx,y2+dgy}};
+	int dgcoln = sizeof(dgcol)/sizeof(dgcol[0]);
+
+	OBJ_ATTR *metr= &obj_buffer[0];
+	obj_set_attr(metr,
+		ATTR0_SQUARE,				// Square, regular sprite
+		ATTR1_SIZE_16,					// 16x16p,
+		ATTR2_PALBANK(15) | tid);		// palbank 0, tile 0
+
+	// position sprite (redundant here; the _real_ position
+	// is set further down
+	obj_set_pos(metr, x, y);
+
+	OBJ_ATTR *dragon= &obj_buffer[1];
+	obj_set_attr(dragon,
+		ATTR0_SQUARE,				// Square, regular sprite
+		ATTR1_SIZE_64,					// 16x16p,
+		ATTR2_PALBANK(7) | 29);		// palbank 0, tile 0
+	affornot[1]=ATTR0_REG;
+	spritex[1]=dgx;
+	spritey[1]=dgy;
+	// position sprite (redundant here; the _real_ position
+	// is set further down
+	obj_set_pos(dragon, dgx, dgy);
+
+	while(1){
+		vid_vsync();
+		key_poll();
+
+
+
+		if(REG_TM3D != sec)
+						{
+								sec= REG_TM3D;
+								tte_printf("#{es;P:0,5}Time %02d:%02d  Best %02d:%02d",
+										 (sec%3600)/60, sec%60,
+									 (hsec%3600)/60, hsec%60);
+									 //tte_printf("#{cx:0x1000}\n x: ,%d",x);      // Print "Hello world!"
+									//tte_printf("#{cx:0x1000}\n y: ,%d",y);      // Print "Hello world!"
+						}
+		// move left/right
+		Point p={x+2*key_tri_horz()+8,y+2*key_tri_vert()+8};
+
+		if(pnpoly(dgcoln,dgcol,p)){
+			REG_TM2CNT ^= TM_ENABLE;
+			REG_TM3CNT ^= TM_ENABLE;
+			tte_printf("#{cx:0x1000}\n Congratulations, \nyou completed 1c1!");
+			tte_printf("#{cx:0x1000}\n Hit 'A' to try again");
+			while(1){
+				key_poll();
+				if(key_hit(KEY_A)){
+					break;
+				}
+			}
+			if (sec<hsec){
+				hsec = sec;
+			}
+			sec=-1;
+			memcpy(&tile_mem[0][0], f1outTiles, f1outTilesLen);
+			// Load map into SBB 28
+			memcpy(&se_mem[20][0], f1outMap, f1outMapLen);
+			memcpy(pal_obj_mem, sp2Pal, sp2PalLen);
+
+			obj_test();
+		}
+
+	if(pnpoly(n5,polygon5,p)){
+		if (0){
+
+		}
+		else{
+			dx = 2*key_tri_horz();
+			x += dx;
+			x2 -= dx;
+
+
+			// move up/down
+			dy = 2*key_tri_vert();
+			y += dy;
+			y2 -= dy;
+			x2o=x2;
+			y2o=y2;
+			if(y<80 && x<120){
+				//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+				obj_set_pos(metr, x, y);
+				REG_BG1HOFS= 0;
+				REG_BG1VOFS= 0;
+
+				x2=0;
+				y2=0;
+				ox=0;
+				oy=0;
+
+
+			}
+			else if(y>512-80 && x<120){
+				//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+				obj_set_pos(metr, x, 160-(512-y));
+
+
+				x2=0;
+				y2=y2-(512-80-y);
+
+
+			}
+			else if(y>512-80 && x>512-120){
+				//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+				obj_set_pos(metr, 240-(512-x), 160-(512-y));
+
+
+				x2=x2-(512-120-x);
+				y2=y2-(512-80-y);
+
+
+			}
+			else if(x>512-120 && y<80){
+				//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+				obj_set_pos(metr, 240-(512-x), y);
+				x2=x2-(512-120-x);
+				y2=0;
+				oy=0;
+
+			}
+			else if(y<80){
+				//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+				obj_set_pos(metr, 120, y);
+				y2=0;
+				REG_BG1HOFS= x-120;
+				oy=0;
+			}
+			else if(y>512-80){
+				obj_set_pos(metr, 120, 160-(512-y));
+				REG_BG1HOFS= x-120;
+				y2=y2-(512-80-y);
+
+			}
+
+			else if(x<120){
+				//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+				obj_set_pos(metr, x, 80);
+				REG_BG1VOFS= y-80;
+				x2=0;
+				ox=0;
+
+			}
+			else if(x>512-120){
+				//obj_set_pos(metr, x, BFN_GET(metr->attr0,ATTR0_Y)+2*key_tri_vert());
+				obj_set_pos(metr, 240-(512-x), 80);
+				REG_BG1VOFS= y-80;
+				x2=x2-(512-120-x);
+
+			}
+			else{
+				REG_BG1HOFS= x-120;
+				REG_BG1VOFS= y-80;
+			}
+
+			//obj_set_pos(bossW, x2+bwx+ox, y2+bwy+oy);
+			obj_set_pos(dragon, x2+dgx, y2+dgy);
+
+			x2=x2o;
+			y2=y2o;
+			//oy=70;
+			//ox=110;
+
+		}
+	}
+	oam_copy(oam_mem, obj_buffer, 2);	// only need to update one
+	obj_aff_copy(obj_aff_mem, obj_aff_buffer, 1);
+	//gjemme ting fra å pakke rundt
+	for (int i=1; i<2; i++){
+		OBJ_ATTR *objj= &obj_buffer[i];
+		//if(abs(y-(BFN_GET(objj->attr0,ATTR0_Y)-y2))>100){
+		if(abs(y-spritey[i])>130 ){
+			//affornot[i]=BFN_GET(objj->attr0,ATTR0_MODE);
+			obj_hide(objj);
+
+		}
+		else{
+			obj_unhide(objj,affornot[i]);
+		}
+	}
+}
 }
 
 int main()
@@ -2256,6 +2523,8 @@ int main()
 	memcpy(&tile_mem[4][0], spTiles, spTilesLen);
 	//memcpy(pal_obj_mem, spPal, spPalLen);
 	memcpy(&tile_mem[4][4], sp2Tiles, sp2TilesLen);
+	memcpy(&tile_mem[4][13], bossWTiles, bossWTilesLen);
+	memcpy(&tile_mem[4][29], dragonTiles, dragonTilesLen);
 	memcpy(pal_obj_mem, sp2Pal, sp2PalLen);
 
 	oam_init(obj_buffer, 128);
