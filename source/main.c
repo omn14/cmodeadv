@@ -1615,6 +1615,55 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 	int f2_2x=421-32 , f2_2y= 437-32-8;
 	Point fence2_2p[] ={{420,426},{420+3,426},{420+3,426+50},{420,426+50},{420,426}};
 	int fence2_2n = sizeof(fence2_2p)/sizeof(fence2_2p[0]);
+	int d1x= 75, d1y=138 ;
+	Point door1p[] ={{x2+d1x,y2+d1y},{x2+d1x+20,y2+d1y},{x2+d1x+20,y2+d1y+8},{x2+d1x,y2+d1y+8},{x2+d1x,y2+d1y}};
+	int door1n = sizeof(door1p)/sizeof(door1p[0]);
+	int s2x= 76, s2y= 160;
+	bool s2press=0;
+	Point s2col[] ={{x2+s2x-8,y2+s2y-8},{x2+s2x+8+8,y2+s2y-8},{x2+s2x+8+8,y2+s2y+8+8},{x2+s2x-8,y2+s2y+8+8},{x2+s2x-8,y2+s2y-8}};
+	int s2coln = sizeof(s2col)/sizeof(s2col[0]);
+	int d2x= 150, d2y=154;
+	Point door2p[] ={{x2+d2x,y2+d2y},{x2+d2x+8,y2+d2y},{x2+d2x+8,y2+d2y+20},{x2+d2x,y2+d2y+20},{x2+d2x,y2+d2y}};
+	int door2n = sizeof(door2p)/sizeof(door2p[0]);
+	int s3x= 130, s3y= 164;
+	bool s3press=0;
+	Point s3col[] ={{x2+s3x-8,y2+s3y-8},{x2+s3x+8+8,y2+s3y-8},{x2+s3x+8+8,y2+s3y+8+8},{x2+s3x-8,y2+s3y+8+8},{x2+s3x-8,y2+s3y-8}};
+	int s3coln = sizeof(s3col)/sizeof(s3col[0]);
+	int d3x= 274, d3y=235;
+	Point door3p[] ={{x2+d3x,y2+d3y},{x2+d3x+8,y2+d3y},{x2+d3x+8,y2+d3y+20},{x2+d3x,y2+d3y+20},{x2+d3x,y2+d3y}};
+	int door3n = sizeof(door3p)/sizeof(door3p[0]);
+	int s4x= 308, s4y= 210;
+	bool s4press=0;
+	Point s4col[] ={{x2+s4x-8,y2+s4y-8},{x2+s4x+8+8,y2+s4y-8},{x2+s4x+8+8,y2+s4y+8+8},{x2+s4x-8,y2+s4y+8+8},{x2+s4x-8,y2+s4y-8}};
+	int s4coln = sizeof(s4col)/sizeof(s4col[0]);
+	int f2_3x=153-20+16 , f2_3y= 257;
+	Point fence2_3p[] ={{x2+f2_3x,y2+f2_3y},{x2+f2_3x+32,y2+f2_3y},{x2+f2_3x+32,y2+f2_3y+8},{x2+f2_3x,y2+f2_3y+8},{x2+f2_3x,y2+f2_3y}};
+	int fence2_3n = sizeof(fence2_3p)/sizeof(fence2_3p[0]);
+	int f2_4x=f2_3x+32 , f2_4y= 257;
+	Point fence2_4p[] ={{x2+f2_4x,y2+f2_4y},{x2+f2_4x+32,y2+f2_4y},{x2+f2_4x+32,y2+f2_4y+8},{x2+f2_4x,y2+f2_4y+8},{x2+f2_4x,y2+f2_4y}};
+	int fence2_4n = sizeof(fence2_4p)/sizeof(fence2_4p[0]);
+	int b2x=178, b2y=242;
+	bool b2press=0;
+	Point b2col[] ={{x2+b2x,y2+b2y},{x2+b2x+8,y2+b2y},{x2+b2x+8,y2+b2y+8},{x2+b2x,y2+b2y+8},{x2+b2x,y2+b2y}};
+	int b2coln = sizeof(b2col)/sizeof(b2col[0]);
+	int b3x=178, b3y=276;
+	bool b3press=0;
+	Point b3col[] ={{x2+b3x,y2+b3y},{x2+b3x+8,y2+b3y},{x2+b3x+8,y2+b3y+8},{x2+b3x,y2+b3y+8},{x2+b3x,y2+b3y}};
+	int b3coln = sizeof(b3col)/sizeof(b3col[0]);
+	int f2_5x=31 , f2_5y= 244;
+	Point fence2_5p[] ={{x2+f2_5x,y2+f2_5y},{x2+f2_5x+32,y2+f2_5y},{x2+f2_5x+32,y2+f2_5y+8},{x2+f2_5x,y2+f2_5y+8},{x2+f2_5x,y2+f2_5y}};
+	int fence2_5n = sizeof(fence2_5p)/sizeof(fence2_5p[0]);
+	int b4x=118, b4y=258;
+	bool b4press=0;
+	Point b4col[] ={{x2+b4x,y2+b4y},{x2+b4x+8,y2+b4y},{x2+b4x+8,y2+b4y+8},{x2+b4x,y2+b4y+8},{x2+b4x,y2+b4y}};
+	int b4coln = sizeof(b4col)/sizeof(b4col[0]);
+	int f2_6x=16 , f2_6y= 324;
+	Point fence2_6p[]={{x2+f2_6x,y2+f2_6y},{x2+f2_6x+32,y2+f2_6y},{x2+f2_6x+32,y2+f2_6y+8},{x2+f2_6x,y2+f2_6y+8},{x2+f2_6x,y2+f2_6y}};
+	int fence2_6n = sizeof(fence2_6p)/sizeof(fence2_6p[0]);
+	int s5x= 24, s5y= 178;
+	bool s5press=0;
+	Point s5col[]={{x2+s5x-8,y2+s5y-8},{x2+s5x+8+8,y2+s5y-8},{x2+s5x+8+8,y2+s5y+8+8},{x2+s5x-8,y2+s5y+8+8},{x2+s5x-8,y2+s5y-8}};
+	int s5coln = sizeof(s5col)/sizeof(s5col[0]);
 
 	u32 t1 = 0;
 
@@ -1710,6 +1759,169 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 	obj_aff_rotate(oaff_new, alpha);
 	obj_aff_postmul(oaff_base, oaff_new);
 
+	OBJ_ATTR *door1L= &obj_buffer[9];
+	obj_set_attr(door1L,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 12);		// palbank 0, tile 0
+	affornot[9]=ATTR0_REG;
+	spritex[9]=d1x;
+	spritey[9]=d1y;
+
+	OBJ_ATTR *door1R= &obj_buffer[10];
+	obj_set_attr(door1R,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 12);		// palbank 0, tile 0
+	affornot[10]=ATTR0_REG;
+	spritex[10]=d1x+8;
+	spritey[10]=d1y;
+
+	OBJ_ATTR *switch2= &obj_buffer[11];
+	obj_set_attr(switch2,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 11);		// palbank 0, tile 0
+	affornot[11]=ATTR0_REG;
+	spritex[11]=s2x;
+	spritey[11]=s2y;
+
+	OBJ_ATTR *door2L= &obj_buffer[12];
+	obj_set_attr(door2L,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 12);		// palbank 0, tile 0
+	affornot[12]=ATTR0_REG;
+	spritex[12]=d2x;
+	spritey[12]=d2y;
+
+	OBJ_ATTR *door2R= &obj_buffer[13];
+	obj_set_attr(door2R,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 12);		// palbank 0, tile 0
+	affornot[13]=ATTR0_REG;
+	spritex[13]=d2x;
+	spritey[13]=d2y+8;
+
+	OBJ_ATTR *switch3= &obj_buffer[14];
+	obj_set_attr(switch3,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 11);		// palbank 0, tile 0
+	affornot[14]=ATTR0_REG;
+	spritex[14]=s3x;
+	spritey[14]=s3y;
+
+	OBJ_ATTR *door3L= &obj_buffer[15];
+	obj_set_attr(door3L,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 12);		// palbank 0, tile 0
+	affornot[15]=ATTR0_REG;
+	spritex[15]=d3x;
+	spritey[15]=d3y;
+
+	OBJ_ATTR *door3R= &obj_buffer[16];
+	obj_set_attr(door3R,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 12);		// palbank 0, tile 0
+	affornot[16]=ATTR0_REG;
+	spritex[16]=d3x;
+	spritey[16]=d3y+8;
+
+	OBJ_ATTR *switch4= &obj_buffer[17];
+	obj_set_attr(switch4,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 11);		// palbank 0, tile 0
+	affornot[17]=ATTR0_REG;
+	spritex[17]=s4x;
+	spritey[17]=s4y;
+
+	OBJ_ATTR *fence2_3= &obj_buffer[18];
+	obj_set_attr(fence2_3,
+		ATTR0_WIDE | ATTR0_4BPP | ATTR0_REG,				// Square, regular sprite
+		ATTR1_SIZE_32x8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 6);		// palbank 0, tile 0
+	//fence8->attr0 ^= ATTR0_AFF_DBL_BIT;
+	affornot[18]=ATTR0_REG;
+	spritex[18]=f2_3x;
+	spritey[18]=f2_3y;
+
+	OBJ_ATTR *fence2_4= &obj_buffer[19];
+	obj_set_attr(fence2_4,
+		ATTR0_WIDE | ATTR0_4BPP | ATTR0_REG,				// Square, regular sprite
+		ATTR1_SIZE_32x8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 6);		// palbank 0, tile 0
+	//fence8->attr0 ^= ATTR0_AFF_DBL_BIT;
+	affornot[19]=ATTR0_REG;
+	spritex[19]=f2_4x;
+	spritey[19]=f2_4y;
+
+	OBJ_ATTR *button2= &obj_buffer[20];
+	obj_set_attr(button2,
+		ATTR0_SQUARE,				// Square, regular sprite
+		ATTR1_SIZE_8,					// 16x8p,
+		ATTR2_PALBANK(0) | 5);		// palbank 0, tile 0
+
+	obj_set_pos(button2, x2+b2x+ox, y2+b2y+oy);
+	affornot[20]=ATTR0_REG;
+	spritex[20]=b2x;
+	spritey[20]=b2y;
+
+	OBJ_ATTR *button3= &obj_buffer[21];
+	obj_set_attr(button3,
+		ATTR0_SQUARE,				// Square, regular sprite
+		ATTR1_SIZE_8,					// 16x8p,
+		ATTR2_PALBANK(0) | 5);		// palbank 0, tile 0
+
+	obj_set_pos(button3, x2+b3x+ox, y2+b3y+oy);
+	affornot[21]=ATTR0_REG;
+	spritex[21]=b3x;
+	spritey[21]=b3y;
+
+	OBJ_ATTR *fence2_5= &obj_buffer[22];
+	obj_set_attr(fence2_5,
+		ATTR0_WIDE | ATTR0_4BPP | ATTR0_REG,				// Square, regular sprite
+		ATTR1_SIZE_32x8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 6);		// palbank 0, tile 0
+	//fence8->attr0 ^= ATTR0_AFF_DBL_BIT;
+	affornot[22]=ATTR0_REG;
+	spritex[22]=f2_5x;
+	spritey[22]=f2_5y;
+
+	OBJ_ATTR *button4= &obj_buffer[23];
+	obj_set_attr(button4,
+		ATTR0_SQUARE,				// Square, regular sprite
+		ATTR1_SIZE_8,					// 16x8p,
+		ATTR2_PALBANK(0) | 5);		// palbank 0, tile 0
+
+	obj_set_pos(button3, x2+b4x+ox, y2+b4y+oy);
+	affornot[23]=ATTR0_REG;
+	spritex[23]=b4x;
+	spritey[23]=b4y;
+
+	OBJ_ATTR *switch5= &obj_buffer[24];
+	obj_set_attr(switch5,
+		ATTR0_SQUARE | ATTR0_4BPP ,				// Square, regular sprite
+		ATTR1_SIZE_8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 11);		// palbank 0, tile 0
+	affornot[24]=ATTR0_REG;
+	spritex[24]=s5x;
+	spritey[24]=s5y;
+
+	OBJ_ATTR *fence2_6= &obj_buffer[25];
+	obj_set_attr(fence2_6,
+		ATTR0_WIDE | ATTR0_4BPP | ATTR0_REG,				// Square, regular sprite
+		ATTR1_SIZE_32x8 ,					// 16x8p,
+		ATTR2_PALBANK(0) | 6);		// palbank 0, tile 0
+	//fence8->attr0 ^= ATTR0_AFF_DBL_BIT;
+	affornot[25]=ATTR0_REG;
+	spritex[25]=f2_6x;
+	spritey[25]=f2_6y;
+
 	while(1){
 		vid_vsync();
 		key_poll();
@@ -1735,11 +1947,54 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 				switch2_1->attr2= ATTR2_BUILD(11, 1, 0);
 			}
 		}
+		if(pnpoly(s2coln,s2col,p) && !s2press){
+			if(key_hit(KEY_A)){
+				s2press=1;
+				d1x -= 8;
+				switch2->attr2= ATTR2_BUILD(11, 1, 0);
+			}
+		}
+		if(pnpoly(s3coln,s3col,p) && !s3press){
+			if(key_hit(KEY_A)){
+				s3press=1;
+				d2y -= 16;
+				switch3->attr2= ATTR2_BUILD(11, 1, 0);
+			}
+		}
+		if(pnpoly(s4coln,s4col,p) && !s4press){
+			if(key_hit(KEY_A)){
+				s4press=1;
+				d3y -= 16;
+				switch4->attr2= ATTR2_BUILD(11, 1, 0);
+			}
+		}
+		if(pnpoly(s5coln,s5col,p) && !s5press){
+			if(key_hit(KEY_A)){
+				s5press=1;
+				fence2_6->attr2= ATTR2_BUILD(6, 1, 0);
+				switch5->attr2= ATTR2_BUILD(11, 1, 0);
+			}
+		}
 		if(pnpoly(b1coln,b1col,p) && !b1press){
 			t1 =sec + 1;
 			b1press=1;
 			fence2_2->attr2= ATTR2_BUILD(6, 1, 0);
 			button1->attr2= ATTR2_BUILD(5, 1, 0);
+		}
+		if(pnpoly(b2coln,b2col,p) && !b2press){
+			b2press=1;
+			fence2_4->attr2= ATTR2_BUILD(6, 1, 0);
+			button2->attr2= ATTR2_BUILD(5, 1, 0);
+		}
+		if(pnpoly(b3coln,b3col,p) && !b3press){
+			b3press=1;
+			fence2_3->attr2= ATTR2_BUILD(6, 1, 0);
+			button3->attr2= ATTR2_BUILD(5, 1, 0);
+		}
+		if(pnpoly(b4coln,b4col,p) && !b4press){
+			b4press=1;
+			fence2_5->attr2= ATTR2_BUILD(6, 1, 0);
+			button4->attr2= ATTR2_BUILD(5, 1, 0);
 		}
 		if(b1press){
 			if(sec>t1){
@@ -1796,6 +2051,27 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 			else if (pnpoly(fence2_2n,fence2_2p,p) && !b1press){
 
 			}
+			else if (pnpoly(fence2_3n,fence2_3p,p) && !b3press){
+
+			}
+			else if (pnpoly(fence2_4n,fence2_4p,p) && !b2press){
+
+			}
+			else if (pnpoly(fence2_5n,fence2_5p,p) && !b4press){
+
+			}
+			else if (pnpoly(fence2_6n,fence2_6p,p) && !s5press){
+
+			}
+			else if (pnpoly(door1n,door1p,p) && !s2press){
+
+			}
+			else if (pnpoly(door2n,door2p,p) && !s3press){
+
+			}
+			else if (pnpoly(door3n,door3p,p) && !s4press){
+
+			}
 
 			else{
 				dx = 2*key_tri_horz();
@@ -1817,6 +2093,8 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 
 					x2=0;
 					y2=0;
+					ox=0;
+					oy=0;
 
 
 				}
@@ -1852,6 +2130,7 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 					obj_set_pos(metr, 120, y);
 					y2=0;
 					REG_BG1HOFS= x-120;
+					oy=0;
 				}
 				else if(y>512-80){
 					obj_set_pos(metr, 120, 160-(512-y));
@@ -1865,6 +2144,7 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 					obj_set_pos(metr, x, 80);
 					REG_BG1VOFS= y-80;
 					x2=0;
+					ox=0;
 
 				}
 				else if(x>512-120){
@@ -1886,19 +2166,38 @@ int n5 = sizeof(polygon5)/sizeof(polygon5[0]);
 				obj_set_pos(warp4, x2+w4x+ox, y2+w4y+oy);
 				obj_set_pos(button1, x2+b1x+ox, y2+b1y+oy);
 				obj_set_pos(fence2_2, x2+f2_2x+ox, y2+f2_2y+ox);
+				obj_set_pos(door1L, x2+d1x+ox, y2+d1y+oy);
+				obj_set_pos(door1R, x2+d1x+8+ox, y2+d1y+oy);
+				obj_set_pos(switch2, x2+s2x+ox, y2+s2y+oy);
+				obj_set_pos(door2L, x2+d2x+ox, y2+d2y+oy);
+				obj_set_pos(door2R, x2+d2x+ox, y2+d2y+8+oy);
+				obj_set_pos(switch3, x2+s3x+ox, y2+s3y+oy);
+				obj_set_pos(door3L, x2+d3x+ox, y2+d3y+oy);
+				obj_set_pos(door3R, x2+d3x+ox, y2+d3y+8+oy);
+				obj_set_pos(switch4, x2+s4x+ox, y2+s4y+oy);
+				obj_set_pos(fence2_3, x2+f2_3x+ox, y2+f2_3y+oy);
+				obj_set_pos(fence2_4, x2+f2_4x+ox, y2+f2_4y+oy);
+				obj_set_pos(button2, x2+b2x+ox, y2+b2y+oy);
+				obj_set_pos(button3, x2+b3x+ox, y2+b3y+oy);
+				obj_set_pos(button4, x2+b4x+ox, y2+b4y+oy);
+				obj_set_pos(fence2_5, x2+f2_5x+ox, y2+f2_5y+oy);
+				obj_set_pos(fence2_6, x2+f2_6x+ox, y2+f2_6y+oy);
+				obj_set_pos(switch5, x2+s5x+ox, y2+s5y+oy);
 
 				x2=x2o;
 				y2=y2o;
+				oy=70;
+				ox=110;
 
 			}
 		}
-		oam_copy(oam_mem, obj_buffer, 9);	// only need to update one
+		oam_copy(oam_mem, obj_buffer, 26);	// only need to update one
 		obj_aff_copy(obj_aff_mem, obj_aff_buffer, 1);
 		//gjemme ting fra å pakke rundt
-		for (int i=1; i<9; i++){
+		for (int i=1; i<26; i++){
 			OBJ_ATTR *objj= &obj_buffer[i];
 			//if(abs(y-(BFN_GET(objj->attr0,ATTR0_Y)-y2))>100){
-			if(abs(y-spritey[i])>130){
+			if(abs(y-spritey[i])>130 ){
 				//affornot[i]=BFN_GET(objj->attr0,ATTR0_MODE);
 				obj_hide(objj);
 
